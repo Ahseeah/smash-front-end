@@ -18,10 +18,10 @@ const Character = props => {
 
   return (
     <li key={props.character.id}>
-      <Link to={`/games/${props.game.id}/characters/${props.character.id}`}>
+      <Link to={`/api/games/${props.game.id}/characters/${props.character.id}`}>
         {props.character.name}
       </Link>
-      <button> onClick={deleteCharacter}> x</button>
+      <button onClick={deleteCharacter}>&times;</button>
     </li>
   )
 }
@@ -35,7 +35,7 @@ class GameDetails extends Component {
 
   loadGame = () => {
     axios
-      .get(`http://localhost:3000/games/${this.props.match.params.id}`)
+      .get(`http://localhost:3000/api/games/${this.props.match.params.id}`)
       .then(response => {
         this.setState({ game: response.data })
       })
@@ -48,7 +48,7 @@ class GameDetails extends Component {
   deleteGame = event => {
     console.log('Deleting game', this.state.game.id)
     axios
-      .delete(`http://localhost:3000/games/${this.state.game.id}`)
+      .delete(`http://localhost:3000/api/games/${this.state.game.id}`)
       .then(response => {
         this.props.history.push('/')
       })
@@ -79,9 +79,12 @@ class GameDetails extends Component {
 
   addCharacter = form => {
     axios
-      .post(`http://localhost:3000/games/${this.state.game.id}/characters`, {
-        character: form.formData
-      })
+      .post(
+        `http://localhost:3000/api/games/${this.state.game.id}/characters`,
+        {
+          character: form.formData
+        }
+      )
       .then(response => {
         this.loadGame()
       })
@@ -106,7 +109,7 @@ class GameDetails extends Component {
         <ul>
           <li>{this.state.game.name}</li>
         </ul>
-        {this.renderCharacters()}
+        {this.renderCharacter()}
         {this.addCharacterForm()}
         <div>
           <Link to={`/games/edit/${this.state.game.id}`}>Edit</Link>
